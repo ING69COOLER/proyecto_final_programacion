@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import co.edu.uniquindio.poo.dataBase.BuildBaseDeDatos;
 
 import java.io.IOException;
  
@@ -32,6 +33,11 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+       
+        BuildBaseDeDatos.crearTablasUsuarios();
+        BuildBaseDeDatos.crearTablaPersonas();
+        
+
         launch();
         
     }

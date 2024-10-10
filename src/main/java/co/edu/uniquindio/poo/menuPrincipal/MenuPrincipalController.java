@@ -36,5 +36,10 @@ public class MenuPrincipalController {
     private void switchToSecondary() throws IOException {
         App.setRoot("inicio_Sesion");
     }
+
+    @FXML
+   private void ventana_agregar_evento( ) throws IOException {
+        App.setRoot("crear_evento");
+    }
     
 }
