@@ -3,8 +3,6 @@ import java.io.IOException;
 
 import co.edu.uniquindio.poo.App;
 import javafx.fxml.FXML;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
