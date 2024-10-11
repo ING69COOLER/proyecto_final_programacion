@@ -36,6 +36,8 @@ public class App extends Application {
        
         BuildBaseDeDatos.crearTablasUsuarios();
         BuildBaseDeDatos.crearTablaPersonas();
+        BuildBaseDeDatos.crearSillas();
+        BuildBaseDeDatos.crearSillasVip();
         
 
         launch();

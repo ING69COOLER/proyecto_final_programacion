@@ -7,7 +7,7 @@ public class BuildBaseDeDatos {
 
     // Método para crear la tabla "persona" si no existe
     public static void crearTablasUsuarios( ) {
-        String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\usuarios\\Usuarios.db";
+        String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
         try {
             // Conectar a la base de datos
             Connection con = DriverManager.getConnection(url);
@@ -30,8 +30,8 @@ public class BuildBaseDeDatos {
         }
     }
 
-    public static void crearTablaEvento(String nombre){
-        String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\eventos\\"+nombre+"_Evento.db";
+    public static void crearTablaEvento(){
+        String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
 
         try{
             Connection con = DriverManager.getConnection(url);
@@ -54,7 +54,7 @@ public class BuildBaseDeDatos {
         }
     }
     public static void crearTablaPersonas(){
-        String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\personas\\Personas.db";
+        String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
 
         try{
             Connection con = DriverManager.getConnection(url);
@@ -66,7 +66,7 @@ public class BuildBaseDeDatos {
                                 "\t\"id_silla\"\tINTEGER NOT NULL UNIQUE,\r\n" + //
                                 "\t\"tipo_silla\"\tINTEGER NOT NULL,\r\n" + //
                                 "\t\"nombre_persona\"\tTEXT NOT NULL,\r\n" + //
-                                "\t\"id_persona\"\tTEXT NOT NULL UNIQUE,\r\n" + //
+                                "\t\"id_persona\"\tINTEGER NOT NULL UNIQUE,\r\n" + //
                                 "\t\"total_pagar\"\tINTEGER NOT NULL,\r\n" + //
                                 "\tPRIMARY KEY(\"id\")\r\n" + //
                                 ");");
@@ -78,8 +78,8 @@ public class BuildBaseDeDatos {
             System.out.println("Error al crear la tabla: " + e);
         }
     }
-    public static void crearSillasVip(String evento){
-        String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\sillas_VIP\\"+"silla_VIP_Evento_"+evento+".db";
+    public static void crearSillasVip( ){
+        String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\"+"DB.db";
 
         try{
             Connection con = DriverManager.getConnection(url);
@@ -87,9 +87,7 @@ public class BuildBaseDeDatos {
 
             smt.executeUpdate("CREATE TABLE \"sillas_vip\" (\r\n" + //
                                 "\t\"id\"\tINTEGER NOT NULL UNIQUE,\r\n" + //
-                                "\t\"id_evento\"\tINTEGER NOT NULL UNIQUE,\r\n" + //
-                                "\t\"id_persona\"\tINTEGER NOT NULL UNIQUE,\r\n" + //
-                                "\t\"extra_pago\"\tINTEGER NOT NULL,\r\n" + //
+                                "\t\"nombre\"\tINTEGER NOT NULL,\r\n" + //
                                 "\tPRIMARY KEY(\"id\" AUTOINCREMENT)\r\n" + //
                                 ");");
             smt.close();
@@ -101,18 +99,16 @@ public class BuildBaseDeDatos {
         }
     }
 
-    public static void crearSillas(String evento){
-        String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\sillas\\"+"silla_Evento_"+evento+".db";
+    public static void crearSillas(){
+        String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\"+"DB.db";
 
         try{
             Connection con = DriverManager.getConnection(url);
             Statement smt = con.createStatement();
 
-            smt.executeUpdate("CREATE TABLE \"sillas_vip\" (\r\n" + //
+            smt.executeUpdate("CREATE TABLE \"sillas\" (\r\n" + //
                                 "\t\"id\"\tINTEGER NOT NULL UNIQUE,\r\n" + //
-                                "\t\"id_evento\"\tINTEGER NOT NULL UNIQUE,\r\n" + //
-                                "\t\"id_persona\"\tINTEGER NOT NULL UNIQUE,\r\n" + //
-                                "\t\"extra_pago\"\tINTEGER NOT NULL,\r\n" + //
+                                "\t\"nombre\"\tINTEGER NOT NULL,\r\n" + //
                                 "\tPRIMARY KEY(\"id\" AUTOINCREMENT)\r\n" + //
                                 ");");
             smt.close();

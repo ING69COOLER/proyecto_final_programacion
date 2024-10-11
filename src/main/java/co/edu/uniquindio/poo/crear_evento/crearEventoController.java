@@ -44,9 +44,9 @@ public class crearEventoController {
     @FXML
     private void crear_evento( ) throws IOException {
         String nombre = "concietito";
-        BuildBaseDeDatos.crearTablaEvento(nombre);
-        BuildBaseDeDatos.crearSillasVip(nombre);
-        BuildBaseDeDatos.crearSillas(nombre);
+        BuildBaseDeDatos.crearTablaEvento();
+        BuildBaseDeDatos.crearSillasVip();
+        BuildBaseDeDatos.crearSillas();
 
         App.setRoot("menu_principal");
     }
