@@ -1,17 +1,23 @@
 package co.edu.uniquindio.poo.registro;
+
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ResourceBundle;
 
+
 import co.edu.uniquindio.poo.App;
+import co.edu.uniquindio.poo.Utils;
+import co.edu.uniquindio.poo.dataBase.DBUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-
-
-public class RegistroController {
+public class RegistroController extends Utils {
 
     @FXML
     private ResourceBundle resources;
@@ -35,27 +41,36 @@ public class RegistroController {
     private TextField txt_contraseña_2;
 
     @FXML
-    private TextField txt_ususario;
+    private TextField txt_usuario;
 
-     @FXML
+    @FXML
     private void registar() throws IOException {
-        App.setRoot("inicio_Sesion");
+        String usuario = txt_usuario.getText();
+        String clave = txt_clave_empresarial.getText();
+        String contraseña1 = txt_contraseña_1.getText();
+        String contraseña2 = txt_contraseña_2.getText();
+
+        // Verificar si las contraseñas coinciden y si la clave empresarial es correcta
+        if (contraseña1.equals(contraseña2) && clave.equals(Utils.getClave_empresarial())) {
+            // Verificar si el usuario ya existe en la base de datos
+            if (usuarioExiste(usuario)) {
+                System.out.println("El usuario ya existe. Intenta con otro nombre de usuario.");
+            } else {
+                // Agregar el usuario a la base de datos
+                DBUtils.agregarUsuarios(usuario, contraseña1);
+                System.out.println("Usuario registrado exitosamente.");
+                
+                // Redirigir a la ventana de inicio de sesión
+                App.setRoot("inicio_Sesion");
+            }
+        } else {
+            System.out.println("Las contraseñas no coinciden o la clave empresarial es incorrecta.");
+        }
     }
 
     @FXML
-    void regresar( ) throws IOException {
+    void regresar() throws IOException {
         App.setRoot("inicio_Sesion");
-    }
-
-    @FXML
-    void initialize() {
-        assert btn_registrar != null : "fx:id=\"btn_registrar\" was not injected: check your FXML file 'registro.fxml'.";
-        assert btn_regresar != null : "fx:id=\"btn_regresar\" was not injected: check your FXML file 'registro.fxml'.";
-        assert txt_clave_empresarial != null : "fx:id=\"txt_clave_empresarial\" was not injected: check your FXML file 'registro.fxml'.";
-        assert txt_contraseña_1 != null : "fx:id=\"txt_contraseña_1\" was not injected: check your FXML file 'registro.fxml'.";
-        assert txt_contraseña_2 != null : "fx:id=\"txt_contraseña_2\" was not injected: check your FXML file 'registro.fxml'.";
-        assert txt_ususario != null : "fx:id=\"txt_ususario\" was not injected: check your FXML file 'registro.fxml'.";
-
     }
 
 }

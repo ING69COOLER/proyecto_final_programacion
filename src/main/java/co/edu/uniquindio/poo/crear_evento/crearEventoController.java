@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import co.edu.uniquindio.poo.App;
 import co.edu.uniquindio.poo.dataBase.BuildBaseDeDatos;
+import co.edu.uniquindio.poo.dataBase.DBUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -45,8 +46,8 @@ public class crearEventoController {
     private void crear_evento( ) throws IOException {
         String nombre = "concietito";
         BuildBaseDeDatos.crearTablaEvento();
-        BuildBaseDeDatos.crearSillasVip();
-        BuildBaseDeDatos.crearSillas();
+        DBUtils.agregarEvento(nombre, 50000, "Concieto", 0.05);
+        
 
         App.setRoot("menu_principal");
     }

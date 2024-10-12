@@ -25,7 +25,7 @@
                   <Font name="Bernard MT Condensed" size="20.0" />
                </font>
             </Label>
-              <Button fx:id="btn_Inicio_Sesion" layoutX="162.0" layoutY="176.0" onAction="#switchToPrimary" style="-fx-background-color: #4CAF50;" styleClass="root" stylesheets="@style.css" text="Iniciar Sesion">
+              <Button fx:id="btn_Inicio_Sesion" layoutX="162.0" layoutY="176.0" onAction="#iniciar_sesion" style="-fx-background-color: #4CAF50;" styleClass="root" stylesheets="@style.css" text="Iniciar Sesion">
                <font>
                   <Font name="Forte" size="15.0" />
                </font>

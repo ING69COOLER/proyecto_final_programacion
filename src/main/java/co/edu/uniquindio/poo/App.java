@@ -1,4 +1,4 @@
-package co.edu.uniquindio.poo;
+ package co.edu.uniquindio.poo;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import co.edu.uniquindio.poo.dataBase.BuildBaseDeDatos;
+import co.edu.uniquindio.poo.dataBase.DBUtils;
 
 import java.io.IOException;
  
@@ -33,15 +34,8 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-       
-        BuildBaseDeDatos.crearTablasUsuarios();
-        BuildBaseDeDatos.crearTablaPersonas();
-        BuildBaseDeDatos.crearSillas();
-        BuildBaseDeDatos.crearSillasVip();
-        
-
+        BuildBaseDeDatos.crearTablas();
         launch();
-        
     }
 
 }
