@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
 import co.edu.uniquindio.poo.App;
 import co.edu.uniquindio.poo.dataBase.BuildBaseDeDatos;
 import co.edu.uniquindio.poo.dataBase.DBUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -43,17 +42,45 @@ public class crearEventoController {
     private TextField txt_porcentaje_extra_evento_vip;
 
     @FXML
-    private void crear_evento( ) throws IOException {
-        String nombre = "concietito";
-        BuildBaseDeDatos.crearTablaEvento();
-        DBUtils.agregarEvento(nombre, 50000, "Concieto", 0.05);
-        
+    private void crear_evento() throws IOException {
+        try {
+            // Obtener valores de los campos de texto
+            String nombre = txt_nombre_evento.getText();
+            int costo = Integer.parseInt(txt_costo_evento.getText());
+            double porcentajeExtra = Double.parseDouble(txt_porcentaje_extra_evento_vip.getText());
 
-        App.setRoot("menu_principal");
+            // Determinar el tipo de evento basado en las casillas de verificación
+            String tipoEvento = "";
+            if (chc_concierto.isSelected()) {
+                tipoEvento = "Concierto";
+            } else if (chc_partido.isSelected()) {
+                tipoEvento = "Partido";
+            }
+
+            // Validar que se haya seleccionado un tipo de evento
+            if (tipoEvento.isEmpty()) {
+                System.out.println("Debes seleccionar el tipo de evento.");
+                return;
+            }
+
+            // Crear la tabla si no existe
+            BuildBaseDeDatos.crearTablaEvento();
+
+            // Agregar el evento a la base de datos
+            DBUtils.agregarEvento(nombre, costo, tipoEvento, porcentajeExtra);
+
+            // Redirigir al menú principal
+            App.setRoot("menu_principal");
+
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Asegúrate de ingresar números válidos para el costo y el porcentaje.");
+        } catch (Exception e) {
+            System.out.println("Error al crear el evento: " + e.getMessage());
+        }
     }
 
     @FXML
-    void regresar( ) throws IOException {
+    void regresar() throws IOException {
         App.setRoot("menu_principal");
     }
 
@@ -67,6 +94,17 @@ public class crearEventoController {
         assert txt_nombre_evento != null : "fx:id=\"txt_nombre_evento\" was not injected: check your FXML file 'crear_evento.fxml'.";
         assert txt_porcentaje_extra_evento_vip != null : "fx:id=\"txt_porcentaje_extra_evento_vip\" was not injected: check your FXML file 'crear_evento.fxml'.";
 
-    }
+        // Lógica para deseleccionar una checkbox si la otra es seleccionada
+        chc_concierto.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                chc_partido.setSelected(false);
+            }
+        });
 
+        chc_partido.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                chc_concierto.setSelected(false);
+            }
+        });
+    }
 }
