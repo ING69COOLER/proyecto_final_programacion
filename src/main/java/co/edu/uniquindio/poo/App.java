@@ -6,7 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import co.edu.uniquindio.poo.dataBase.BuildBaseDeDatos;
-import co.edu.uniquindio.poo.dataBase.DBUtils;
 
 import java.io.IOException;
  
@@ -18,7 +17,7 @@ public class App extends Application {
     private static Scene scene;
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(@SuppressWarnings("exports") Stage stage) throws IOException {
         scene = new Scene(loadFXML("inicio_Sesion"), 640, 480);
         stage.setScene(scene);
         stage.show();

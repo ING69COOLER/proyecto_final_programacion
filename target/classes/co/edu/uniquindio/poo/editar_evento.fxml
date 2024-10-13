@@ -1,47 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?> <!-- Importación añadida -->
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.editar_Evento.EditarEventoController">
+<!-- Importación añadida -->
+
+<AnchorPane style="-fx-background-color: #F5F5DC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.editar_Evento.EditarEventoController">
     <children>
-        <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0" spacing="10.0">
+        <VBox alignment="TOP_CENTER" prefHeight="228.0" prefWidth="600.0" spacing="10.0" style="-fx-alignment: #F5F5DC;">
             <!-- Parte superior con nombre del evento y costo -->
-            <HBox spacing="10.0">
-                <Label fx:id="lblNombreEvento" text="Nombre del Evento" />
-                <Label fx:id="lblCostoEvento" text="Costo: $" />
+            <HBox spacing="10.0" style="-fx-background-color: #F5F5DC;">
+                <Label fx:id="lblNombreEvento" text="Nombre del Evento">
+               <font>
+                  <Font name="Forte" size="14.0" />
+               </font></Label>
+                <Label fx:id="lblCostoEvento" text="Costo: $">
+               <font>
+                  <Font name="Forte" size="14.0" />
+               </font></Label>
             </HBox>
 
             <!-- VBox para las sillas regulares y VIP -->
-            <HBox spacing="30.0">
-                <VBox>
-                    <Label text="Sillas Regulares" />
+            <HBox spacing="30.0" style="-fx-background-color: #F5F5DC;">
+                <VBox style="-fx-background-color: #F5F5DC;">
+                    <Label text="Sillas Regulares">
+                  <font>
+                     <Font name="Forte" size="14.0" />
+                  </font></Label>
                     <GridPane fx:id="gridSillas" hgap="10" vgap="10" />
                 </VBox>
-                <VBox>
-                    <Label text="Sillas VIP" />
+                <VBox style="-fx-background-color: #F5F5DC;">
+                    <Label text="Sillas VIP">
+                  <font>
+                     <Font name="Forte" size="14.0" />
+                  </font></Label>
                     <GridPane fx:id="gridSillasVip" hgap="10" vgap="10" />
                 </VBox>
             </HBox>
 
             <!-- Campos para el nombre y ID de la persona -->
-            <VBox spacing="10.0">
-                <TextField fx:id="txtNombrePersona" promptText="Nombre de la persona" />
-                <TextField fx:id="txtIdPersona" promptText="ID de la persona" />
+            <VBox spacing="10.0" style="-fx-background-color: #F5F5DC;">
+                <TextField fx:id="txtNombrePersona" promptText="Nombre de la persona">
+               <font>
+                  <Font name="Forte" size="16.0" />
+               </font></TextField>
+                <TextField fx:id="txtIdPersona" promptText="ID de la persona">
+               <font>
+                  <Font name="Forte" size="16.0" />
+               </font></TextField>
             </VBox>
 
             <!-- Label para el total a pagar -->
-            <Label fx:id="lblTotalPagar" text="Total a Pagar: $" />
+            <Label fx:id="lblTotalPagar" text="Total a Pagar: $">
+            <font>
+               <Font name="Forte" size="14.0" />
+            </font></Label>
 
             <!-- Botón para confirmar -->
-            <Button text="Aceptar" onAction="#guardarCliente" />
+            <Button onAction="#guardarCliente" style="-fx-background-color: #4CAF50;" text="Aceptar">
+            <font>
+               <Font name="Forte" size="14.0" />
+            </font></Button>
         </VBox>
     </children>
 </AnchorPane>

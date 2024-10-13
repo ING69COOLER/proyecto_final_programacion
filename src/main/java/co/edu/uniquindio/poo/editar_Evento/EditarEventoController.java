@@ -12,8 +12,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 public class EditarEventoController {
 
@@ -57,10 +57,11 @@ public class EditarEventoController {
             }
 
             // Cargar las sillas regulares
-            cargarSillasDisponibles("SELECT nombre FROM sillas_regular", gridSillas);
+            cargarSillasDisponibles("SELECT id, nombre FROM sillas_regular", gridSillas, "sillas_regular");
 
             // Cargar las sillas VIP
-            cargarSillasDisponibles("SELECT nombre FROM sillas_vip", gridSillasVip);
+            cargarSillasDisponibles("SELECT id, nombre FROM sillas_vip", gridSillasVip, "sillas_vip");
+
 
             con.close();
         } catch (Exception e) {
@@ -68,48 +69,53 @@ public class EditarEventoController {
         }
     }
 
- private void cargarSillasDisponibles(String query, GridPane grid) {
+private void cargarSillasDisponibles(String query, GridPane grid, String tipoSillaQuery) {
     try {
         String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
         Connection con = DriverManager.getConnection(url);
 
-        // Consultar las sillas ocupadas para el evento actual
-        String querySillasOcupadas = "SELECT id_silla, tipo_silla FROM persona WHERE id_evento = ?";
+        // Consultar las sillas ocupadas para el evento actual y el tipo de silla específico (regular o VIP)
+        String querySillasOcupadas = "SELECT id_silla FROM persona WHERE id_evento = ? AND tipo_silla = ?";
         PreparedStatement psOcupadas = con.prepareStatement(querySillasOcupadas);
-        psOcupadas.setInt(1, idEvento);
+        psOcupadas.setInt(1, idEvento);  // Usamos el id del evento actual
+        psOcupadas.setString(2, tipoSillaQuery);  // Filtramos por el tipo de silla ("sillas_regular" o "sillas_vip")
         ResultSet rsOcupadas = psOcupadas.executeQuery();
 
-        // Almacenar las sillas ocupadas en un mapa para fácil acceso
-        Map<Integer, String> sillasOcupadas = new HashMap<>();
+        // Almacenar las sillas ocupadas en un Set (no se requieren pares clave-valor)
+        Set<Integer> sillasOcupadas = new HashSet<>();
         while (rsOcupadas.next()) {
             int idSilla = rsOcupadas.getInt("id_silla");
-            String tipoSilla = rsOcupadas.getString("tipo_silla");
-            sillasOcupadas.put(idSilla, tipoSilla);
+            sillasOcupadas.add(idSilla);
+            // Mostrar datos para depuración
+            System.out.println("Silla ocupada: ID=" + idSilla);
         }
 
-        ResultSet rsSillas = con.createStatement().executeQuery(query);
+        // Ejecutar la consulta para obtener todas las sillas (regulares o VIP)
+        PreparedStatement psSillas = con.prepareStatement(query);
+        ResultSet rsSillas = psSillas.executeQuery();
         int row = 0, col = 0;
-        int idSilla = 0;
 
         while (rsSillas.next()) {
-            idSilla++; // Asignar un ID incremental a cada silla
-
-            RadioButton silla = new RadioButton(rsSillas.getString("nombre"));
-            silla.setToggleGroup(toggleGroupSillas); // Asignar el RadioButton al mismo grupo
+            int idSilla = rsSillas.getInt("id");  // Obtener el ID real de la silla
+            String nombreSilla = rsSillas.getString("nombre");
+            RadioButton silla = new RadioButton(nombreSilla);
+            silla.setToggleGroup(toggleGroupSillas);  // Asignar el RadioButton al mismo grupo
 
             // Verificar si la silla está ocupada
-            boolean esOcupada = sillasOcupadas.containsKey(idSilla) &&
-                    sillasOcupadas.get(idSilla).equals(grid == gridSillas ? "sillas_regular" : "sillas_vip");
+            boolean esOcupada = sillasOcupadas.contains(idSilla);
+
+            // Mostrar datos de depuración sobre la silla
+            System.out.println("Verificando silla: ID=" + idSilla + ", Nombre=" + nombreSilla + ", Ocupada=" + esOcupada);
 
             if (esOcupada) {
-                silla.setStyle("-fx-text-fill: red;"); // Cambiar el color del texto a rojo si la silla está ocupada
-                silla.setDisable(true); // Opcional: Deshabilitar la silla si está ocupada
+                silla.setStyle("-fx-text-fill: red;");  // Cambiar el color del texto a rojo si la silla está ocupada
+                silla.setDisable(true);  // Opcional: Deshabilitar la silla si está ocupada
             }
 
             silla.setOnAction(e -> calcularTotalPagar());
             grid.add(silla, col++, row);
 
-            if (col == 5) {
+            if (col == 5) {  // Cambia de fila después de 5 columnas
                 col = 0;
                 row++;
             }
@@ -120,6 +126,9 @@ public class EditarEventoController {
         System.out.println("Error al cargar las sillas: " + e);
     }
 }
+
+    
+    
 
     @FXML
     private void calcularTotalPagar() {
