@@ -223,7 +223,8 @@ private void cargarSillasDisponibles(String query, GridPane grid, String tipoSil
                 System.out.println("Cliente guardado exitosamente.");
 
                 Stage stage = (Stage) txtNombrePersona.getScene().getWindow(); // Obtener el Stage desde cualquier nodo
-                stage.close(); // Cerrar la ventana actual
+                stage.close(); 
+                
             }
         } catch (Exception e) {
             System.out.println("Error al guardar el cliente: " + e.getMessage());
