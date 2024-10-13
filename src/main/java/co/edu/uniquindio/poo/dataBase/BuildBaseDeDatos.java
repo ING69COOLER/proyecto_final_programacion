@@ -70,7 +70,7 @@ public class BuildBaseDeDatos {
                     "\t\"id_silla\"\tINTEGER NOT NULL ,\r\n" + //
                     "\t\"tipo_silla\"\tTEXT NOT NULL ,\r\n" + //
                     "\t\"nombre_persona\"\tTEXT NOT NULL,\r\n" + //
-                    "\t\"id_persona\"\tINTEGER NOT NULL UNIQUE,\r\n" + //
+                    "\t\"id_persona\"\tINTEGER NOT NULL ,\r\n" + //
                     "\t\"total_pagar\"\tINTEGER NOT NULL,\r\n" + //
                     "\tPRIMARY KEY(\"id\")\r\n" + //
                     ");");

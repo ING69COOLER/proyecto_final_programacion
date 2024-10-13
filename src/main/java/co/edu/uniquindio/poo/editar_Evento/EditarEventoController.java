@@ -154,20 +154,22 @@ private void cargarSillasDisponibles(String query, GridPane grid, String tipoSil
         String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
 
         try (Connection con = DriverManager.getConnection(url)) {
-            // Verificar si el id_persona ya está asignado
-            String queryCheckId = "SELECT COUNT(*) FROM persona WHERE id_persona = ?";
-            try (PreparedStatement psCheckId = con.prepareStatement(queryCheckId)) {
-                psCheckId.setInt(1, Integer.parseInt(txtIdPersona.getText()));
-                try (ResultSet rsCheckId = psCheckId.executeQuery()) {
-                    rsCheckId.next();
-                    int countId = rsCheckId.getInt(1);
-
-                    if (countId > 0) {
-                        System.out.println("Error: El id_persona ya existe. No se puede duplicar.");
-                        return; // Salir del método si el id_persona ya existe
+            // Verificar si el id_persona ya está asignado a este evento
+            String queryCheckIdEvento = "SELECT COUNT(*) FROM persona WHERE id_persona = ? AND id_evento = ?";
+            try (PreparedStatement psCheckIdEvento = con.prepareStatement(queryCheckIdEvento)) {
+                psCheckIdEvento.setInt(1, Integer.parseInt(txtIdPersona.getText()));
+                psCheckIdEvento.setInt(2, idEvento); // Usar el id del evento actual
+                try (ResultSet rsCheckIdEvento = psCheckIdEvento.executeQuery()) {
+                    rsCheckIdEvento.next();
+                    int countIdEvento = rsCheckIdEvento.getInt(1);
+    
+                    if (countIdEvento > 0) {
+                        System.out.println("Error: El id_persona ya está asignado a este evento. No se puede duplicar.");
+                        return; // Salir del método si el id_persona ya existe para el evento actual
                     }
                 }
             }
+
 
             // Verificar si la combinación de evento, silla y tipo ya está asignada
             String queryCheck = "SELECT COUNT(*) FROM persona WHERE id_evento = ? AND id_silla = ? AND tipo_silla = ?";

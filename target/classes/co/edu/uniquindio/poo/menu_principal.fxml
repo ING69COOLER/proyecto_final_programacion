@@ -22,19 +22,24 @@
                   <Font name="Forte" size="15.0" />
                </font>
             </Button>
-            <Button fx:id="btn_balance" layoutX="470.0" layoutY="10.0" mnemonicParsing="false" onAction="#abrir_ventana_balance" prefHeight="26.0" prefWidth="86.0" style="-fx-background-color: #7FDBFF;" text="Balance" AnchorPane.bottomAnchor="82.4" AnchorPane.leftAnchor="469.6" AnchorPane.topAnchor="10.0">
+            <Button fx:id="btn_balance" layoutX="470.0" layoutY="10.0" mnemonicParsing="false" onAction="#abrir_ventana_balance" prefHeight="26.0" prefWidth="86.0" style="-fx-background-color: #7FDBFF;" AnchorPane.bottomAnchor="82.4" AnchorPane.leftAnchor="469.6" AnchorPane.topAnchor="10.0" text="Balance">
                <font>
                   <Font name="Forte" size="12.0" />
                </font>
             </Button>
          </children>
       </AnchorPane>
-      
-      <!-- Sección donde se mostrarán los botones de los eventos -->
+
+      <!-- Sección donde se mostrará el resumen de sillas -->
       <AnchorPane prefHeight="334.0" prefWidth="574.0">
          <children>
-            <VBox fx:id="vboxEventos" alignment="CENTER" layoutX="14.0" layoutY="20.0" prefHeight="300.0" prefWidth="241.0" spacing="10.0" />
-            <VBox layoutX="287.0" layoutY="20.0" prefHeight="300.0" prefWidth="280.0" />
+            <VBox fx:id="vboxResumen" alignment="CENTER" layoutX="14.0" layoutY="20.0" prefHeight="300.0" prefWidth="241.0" spacing="10.0">
+               <Label fx:id="labelResumen" text="Resumen de Sillas" style="-fx-font-weight: bold;" />
+               <Label fx:id="labelSillasLibres" text="" />
+            </VBox>
+
+            <!-- Sección donde se mostrarán los botones de los eventos -->
+            <VBox fx:id="vboxEventos" alignment="CENTER" layoutX="287.0" layoutY="20.0" prefHeight="300.0" prefWidth="280.0" spacing="10.0" />
          </children>
       </AnchorPane>
    </children>
