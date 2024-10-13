@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -30,14 +29,12 @@
             </Button>
          </children>
       </AnchorPane>
+      
+      <!-- Sección donde se mostrarán los botones de los eventos -->
       <AnchorPane prefHeight="334.0" prefWidth="574.0">
          <children>
-            <SplitPane dividerPositions="0.4887843704775687" layoutX="8.0" layoutY="5.0" prefHeight="325.0" prefWidth="554.0">
-              <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #F5F5DC;" />
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="240.0" prefWidth="358.0" style="-fx-background-color: #F5F5DC;" />
-              </items>
-            </SplitPane>
+            <VBox fx:id="vboxEventos" alignment="CENTER" layoutX="14.0" layoutY="20.0" prefHeight="300.0" prefWidth="241.0" spacing="10.0" />
+            <VBox layoutX="287.0" layoutY="20.0" prefHeight="300.0" prefWidth="280.0" />
          </children>
       </AnchorPane>
    </children>

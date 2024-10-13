@@ -3,6 +3,7 @@ package co.edu.uniquindio.poo.dataBase;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class BuildBaseDeDatos {
@@ -65,9 +66,9 @@ public class BuildBaseDeDatos {
 
             smt.executeUpdate("CREATE TABLE \"persona\" (\r\n" + //
                     "\t\"id\"\tINTEGER NOT NULL UNIQUE,\r\n" + //
-                    "\t\"id_evento\"\tINTEGER NOT NULL UNIQUE,\r\n" + //
-                    "\t\"id_silla\"\tINTEGER NOT NULL UNIQUE,\r\n" + //
-                    "\t\"tipo_silla\"\tTEXT NOT NULL,\r\n" + //
+                    "\t\"id_evento\"\tINTEGER NOT NULL ,\r\n" + //
+                    "\t\"id_silla\"\tINTEGER NOT NULL ,\r\n" + //
+                    "\t\"tipo_silla\"\tTEXT NOT NULL ,\r\n" + //
                     "\t\"nombre_persona\"\tTEXT NOT NULL,\r\n" + //
                     "\t\"id_persona\"\tINTEGER NOT NULL UNIQUE,\r\n" + //
                     "\t\"total_pagar\"\tINTEGER NOT NULL,\r\n" + //
@@ -83,62 +84,91 @@ public class BuildBaseDeDatos {
     }
 
     public static void crearSillasVip() {
-        String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
+    String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
 
-        try (Connection con = DriverManager.getConnection(url);
-                Statement smt = con.createStatement()) {
+    try (Connection con = DriverManager.getConnection(url);
+         Statement smt = con.createStatement()) {
 
-            // Crear la tabla sillas_vip
-            smt.executeUpdate("CREATE TABLE IF NOT EXISTS \"sillas_vip\" (\r\n" +
-                    "\t\"id\"\tINTEGER NOT NULL UNIQUE,\r\n" +
-                    "\t\"nombre\"\tTEXT NOT NULL,\r\n" + // Cambiado a TEXT para las letras
-                    "\tPRIMARY KEY(\"id\" AUTOINCREMENT)\r\n" +
-                    ");");
+        // Crear la tabla sillas_vip si no existe
+        smt.executeUpdate("CREATE TABLE IF NOT EXISTS \"sillas_vip\" (\r\n" +
+                "\t\"id\"\tINTEGER NOT NULL UNIQUE,\r\n" +
+                "\t\"nombre\"\tTEXT NOT NULL,\r\n" + // Cambiado a TEXT para las letras
+                "\tPRIMARY KEY(\"id\" AUTOINCREMENT)\r\n" +
+                ");");
 
-            // Insertar 30 puestos automáticamente con letras
-            String insertQuery = "INSERT INTO sillas_vip (nombre) VALUES (?)";
-            try (PreparedStatement pstmt = con.prepareStatement(insertQuery)) {
-                for (int i = 0; i < 30; i++) {
-                    char letra = (char) ('A' + (i % 26)); // Obtener una letra del alfabeto (se repiten después de 'Z')
-                    pstmt.setString(1, String.valueOf(letra)); // Asignar la letra de silla
-                    pstmt.executeUpdate();
-                }
+        // Verificar si ya existen registros en la tabla
+        String countQuery = "SELECT COUNT(*) FROM sillas_vip";
+        try (Statement stmtCount = con.createStatement();
+             ResultSet rsCount = stmtCount.executeQuery(countQuery)) {
+
+            rsCount.next();
+            int count = rsCount.getInt(1);
+
+            if (count > 0) {
+                System.out.println("Las sillas VIP ya están creadas. No se insertarán nuevas.");
+                return; // Salir si ya hay registros
             }
-
-            System.out.println("Tabla sillas_vip creada e insertadas 30 sillas con letras.");
-        } catch (Exception e) {
-            System.out.println("Error al crear la tabla o insertar sillas: " + e);
         }
+
+        // Insertar sillas VIP si no hay registros
+        String insertQuery = "INSERT INTO sillas_vip (nombre) VALUES (?)";
+        try (PreparedStatement pstmt = con.prepareStatement(insertQuery)) {
+            for (int i = 0; i < 10; i++) {
+                char letra = (char) ('A' + (i % 26)); // Obtener una letra del alfabeto (se repiten después de 'Z')
+                pstmt.setString(1, String.valueOf(letra)); // Asignar la letra de silla
+                pstmt.executeUpdate();
+            }
+        }
+
+        System.out.println("Sillas VIP insertadas exitosamente.");
+    } catch (Exception e) {
+        System.out.println("Error al crear o insertar sillas VIP: " + e);
     }
+}
 
     public static void crearSillas() {
         String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
 
         try (Connection con = DriverManager.getConnection(url);
-                Statement smt = con.createStatement()) {
+            Statement smt = con.createStatement()) {
 
-            // Crear la tabla sillas
-            smt.executeUpdate("CREATE TABLE IF NOT EXISTS \"sillas\" (\r\n" +
+            // Crear la tabla sillas si no existe
+            smt.executeUpdate("CREATE TABLE IF NOT EXISTS \"sillas_regular\" (\r\n" +
                     "\t\"id\"\tINTEGER NOT NULL UNIQUE,\r\n" +
                     "\t\"nombre\"\tTEXT NOT NULL,\r\n" + // Cambiado a TEXT para las letras
                     "\tPRIMARY KEY(\"id\" AUTOINCREMENT)\r\n" +
                     ");");
 
-            // Insertar 30 puestos automáticamente con letras
-            String insertQuery = "INSERT INTO sillas (nombre) VALUES (?)";
+            // Verificar si ya existen registros en la tabla
+            String countQuery = "SELECT COUNT(*) FROM sillas_regular";
+            try (Statement stmtCount = con.createStatement();
+                ResultSet rsCount = stmtCount.executeQuery(countQuery)) {
+
+                rsCount.next();
+                int count = rsCount.getInt(1);
+
+                if (count > 0) {
+                    System.out.println("Las sillas regulares ya están creadas. No se insertarán nuevas.");
+                    return; // Salir si ya hay registros
+                }
+            }
+
+            // Insertar sillas regulares si no hay registros
+            String insertQuery = "INSERT INTO sillas_regular (nombre) VALUES (?)";
             try (PreparedStatement pstmt = con.prepareStatement(insertQuery)) {
-                for (int i = 0; i < 30; i++) {
+                for (int i = 0; i < 10; i++) {
                     char letra = (char) ('A' + (i % 26)); // Obtener una letra del alfabeto (se repiten después de 'Z')
                     pstmt.setString(1, String.valueOf(letra)); // Asignar la letra de silla
                     pstmt.executeUpdate();
                 }
             }
 
-            System.out.println("Tabla sillas creada e insertadas 30 sillas con letras.");
+            System.out.println("Sillas regulares insertadas exitosamente.");
         } catch (Exception e) {
-            System.out.println("Error al crear la tabla o insertar sillas: " + e);
+            System.out.println("Error al crear o insertar sillas regulares: " + e);
         }
     }
+
 
     public static void crearTablas(){
         crearSillas();

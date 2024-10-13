@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?> <!-- Importación añadida -->
+
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.editar_Evento.EditarEventoController">
+    <children>
+        <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0" spacing="10.0">
+            <!-- Parte superior con nombre del evento y costo -->
+            <HBox spacing="10.0">
+                <Label fx:id="lblNombreEvento" text="Nombre del Evento" />
+                <Label fx:id="lblCostoEvento" text="Costo: $" />
+            </HBox>
+
+            <!-- VBox para las sillas regulares y VIP -->
+            <HBox spacing="30.0">
+                <VBox>
+                    <Label text="Sillas Regulares" />
+                    <GridPane fx:id="gridSillas" hgap="10" vgap="10" />
+                </VBox>
+                <VBox>
+                    <Label text="Sillas VIP" />
+                    <GridPane fx:id="gridSillasVip" hgap="10" vgap="10" />
+                </VBox>
+            </HBox>
+
+            <!-- Campos para el nombre y ID de la persona -->
+            <VBox spacing="10.0">
+                <TextField fx:id="txtNombrePersona" promptText="Nombre de la persona" />
+                <TextField fx:id="txtIdPersona" promptText="ID de la persona" />
+            </VBox>
+
+            <!-- Label para el total a pagar -->
+            <Label fx:id="lblTotalPagar" text="Total a Pagar: $" />
+
+            <!-- Botón para confirmar -->
+            <Button text="Aceptar" onAction="#guardarCliente" />
+        </VBox>
+    </children>
+</AnchorPane>
