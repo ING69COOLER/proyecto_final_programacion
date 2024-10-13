@@ -6,6 +6,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.TextArea?>
+
 
 <VBox alignment="CENTER" prefHeight="519.0" prefWidth="613.0" spacing="20.0" style="-fx-background-color: #F5F5DC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.menuPrincipal.MenuPrincipalController">
    <children>
@@ -35,7 +37,8 @@
          <children>
             <VBox fx:id="vboxResumen" alignment="CENTER" layoutX="14.0" layoutY="20.0" prefHeight="300.0" prefWidth="241.0" spacing="10.0">
                <Label fx:id="labelResumen" text="Resumen de Sillas" style="-fx-font-weight: bold;" />
-               <Label fx:id="labelSillasLibres" text="" />
+               <TextArea fx:id="labelSillasLibres" prefHeight="200.0" prefWidth="300.0" wrapText="true" editable="false" />
+
             </VBox>
 
             <!-- Sección donde se mostrarán los botones de los eventos -->

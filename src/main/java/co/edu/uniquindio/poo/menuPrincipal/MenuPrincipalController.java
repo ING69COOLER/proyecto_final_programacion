@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ResourceBundle;
@@ -16,6 +17,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -38,6 +41,9 @@ public class MenuPrincipalController {
 
     @FXML
     private VBox vboxEventos;
+
+    @FXML
+    private TextArea labelSillasLibres;
 
     // Método para abrir la ventana de balance
     @FXML
@@ -82,6 +88,8 @@ public class MenuPrincipalController {
 
             stmt.close();
             con.close();
+
+            
         } catch (Exception e) {
             System.out.println("Error al cargar los eventos: " + e);
         }
@@ -107,10 +115,59 @@ public class MenuPrincipalController {
         }
     }
     
+   private void actualizarResumenSillas() {
+    String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
 
+    try (Connection con = DriverManager.getConnection(url);
+         Statement stmt = con.createStatement();
+         ResultSet eventos = stmt.executeQuery("SELECT * FROM Evento")) {
+
+        StringBuilder resumen = new StringBuilder();
+
+        while (eventos.next()) {
+            String nombreEvento = eventos.getString("Nombre");
+            int idEvento = eventos.getInt("Id");
+
+            // Contar las sillas VIP disponibles para cada evento
+            String vipQuery = "SELECT COUNT(*) FROM sillas_vip WHERE id NOT IN " +
+                              "(SELECT id_silla FROM persona WHERE id_evento = ? AND tipo_silla = 'sillas_vip')";
+            try (PreparedStatement pstmtVip = con.prepareStatement(vipQuery)) {
+                pstmtVip.setInt(1, idEvento);
+                ResultSet rsVip = pstmtVip.executeQuery();
+                rsVip.next();
+                int sillasVip = rsVip.getInt(1);
+
+                // Contar las sillas regulares disponibles para cada evento
+                String regularQuery = "SELECT COUNT(*) FROM sillas_regular WHERE id NOT IN " +
+                                      "(SELECT id_silla FROM persona WHERE id_evento = ? AND tipo_silla = 'sillas_regular')";
+                try (PreparedStatement pstmtRegular = con.prepareStatement(regularQuery)) {
+                    pstmtRegular.setInt(1, idEvento);
+                    ResultSet rsRegular = pstmtRegular.executeQuery();
+                    rsRegular.next();
+                    int sillasRegulares = rsRegular.getInt(1);
+
+                    // Formatear el texto de salida
+                    resumen.append("Evento: ").append(nombreEvento).append("\n")
+                           .append("  Sillas Regulares: ").append(sillasRegulares).append("\n")
+                           .append("  Sillas VIP: ").append(sillasVip).append("\n\n");
+                }
+            }
+        }
+
+        // Actualiza el label con la información
+        labelSillasLibres.setText(resumen.toString());
+
+    } catch (Exception e) {
+        System.out.println("Error al contar las sillas: " + e);
+    }
+}
+
+    
+    
     // Este método se llama al inicializar el controlador
     @FXML
     void initialize() {
         cargarEventos(); // Cargar los eventos al abrir la ventana
+        actualizarResumenSillas();
     }
 }
