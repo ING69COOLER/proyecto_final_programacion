@@ -3,6 +3,7 @@ module co.edu.uniquindio.poo {
     requires javafx.fxml;
     requires javafx.base;
     requires java.sql;
+    requires javafx.graphics;
 
     // Abre los paquetes necesarios para JavaFX
     opens co.edu.uniquindio.poo to javafx.fxml;

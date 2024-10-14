@@ -8,25 +8,36 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import co.edu.uniquindio.poo.App;
+import co.edu.uniquindio.poo.Utils;
 import co.edu.uniquindio.poo.editar_Evento.EditarEventoController;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.util.Pair;
 
-public class MenuPrincipalController {
+public class MenuPrincipalController extends Utils {
 
     @FXML
     private ResourceBundle resources;
@@ -48,6 +59,9 @@ public class MenuPrincipalController {
 
     @FXML
     private TextArea labelSillasLibres;
+
+    @FXML
+    private Button btn_eliminar_evento;
 
     // Método para abrir la ventana de balance
     @FXML
@@ -186,6 +200,116 @@ public class MenuPrincipalController {
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> actualizarResumenSillas()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+    }
+
+    @FXML
+    void eliminar_evento(ActionEvent event) {
+        Optional<Pair<String, String>> result = mostrarDialogoEliminarEvento();
+        result.ifPresent(datos -> {
+            String nombreEvento = datos.getKey();
+            String claveEmpresarial = datos.getValue();
+
+            // Validar clave empresarial
+            if (!validarClaveEmpresarial(claveEmpresarial)) {
+                System.out.println("Clave empresarial incorrecta.");
+                return;
+            }
+
+            // Eliminar el evento y personas relacionadas
+            if (eliminarPersonasYEvento(nombreEvento)) {
+                limpiarVistaEventos();
+                cargarEventos();
+            }
+        });
+    }
+
+    // Mostrar diálogo para ingresar nombre del evento y clave empresarial
+    private Optional<Pair<String, String>> mostrarDialogoEliminarEvento() {
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("Eliminar Evento");
+        dialog.setHeaderText("Ingrese el nombre del evento y la clave empresarial para eliminarlo");
+
+        ButtonType eliminarButtonType = new ButtonType("Eliminar", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(eliminarButtonType, ButtonType.CANCEL);
+
+        TextField txtNombreEvento = new TextField();
+        txtNombreEvento.setPromptText("Nombre del evento");
+        PasswordField txtClaveEmpresarial = new PasswordField();
+        txtClaveEmpresarial.setPromptText("Clave empresarial");
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        grid.add(new Label("Nombre del evento:"), 0, 0);
+        grid.add(txtNombreEvento, 1, 0);
+        grid.add(new Label("Clave empresarial:"), 0, 1);
+        grid.add(txtClaveEmpresarial, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        Node eliminarButton = dialog.getDialogPane().lookupButton(eliminarButtonType);
+        eliminarButton.setDisable(true);
+
+        txtNombreEvento.textProperty().addListener((observable, oldValue, newValue) -> {
+            eliminarButton.setDisable(newValue.trim().isEmpty() || txtClaveEmpresarial.getText().trim().isEmpty());
+        });
+        txtClaveEmpresarial.textProperty().addListener((observable, oldValue, newValue) -> {
+            eliminarButton.setDisable(newValue.trim().isEmpty() || txtNombreEvento.getText().trim().isEmpty());
+        });
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == eliminarButtonType) {
+                return new Pair<>(txtNombreEvento.getText(), txtClaveEmpresarial.getText());
+            }
+            return null;
+        });
+
+        return dialog.showAndWait();
+    }
+
+    // Validar la clave empresarial ingresada
+    private boolean validarClaveEmpresarial(String claveEmpresarial) {
+        return claveEmpresarial.equals(getClave_empresarial());
+    }
+
+    // Eliminar las personas asociadas y el evento de la base de datos
+    private boolean eliminarPersonasYEvento(String nombreEvento) {
+        String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
+
+        try (Connection con = DriverManager.getConnection(url)) {
+            // Primero eliminar las personas relacionadas con el evento
+            String queryEliminarPersonas = "DELETE FROM persona WHERE id_evento = (SELECT Id FROM Evento WHERE Nombre = ?)";
+            try (PreparedStatement psEliminarPersonas = con.prepareStatement(queryEliminarPersonas)) {
+                psEliminarPersonas.setString(1, nombreEvento);
+                int personasEliminadas = psEliminarPersonas.executeUpdate();
+                System.out.println("Se eliminaron " + personasEliminadas + " personas relacionadas con el evento.");
+            }
+
+            // Luego eliminar el evento
+            String queryEliminarEvento = "DELETE FROM Evento WHERE Nombre = ?";
+            try (PreparedStatement psEliminarEvento = con.prepareStatement(queryEliminarEvento)) {
+                psEliminarEvento.setString(1, nombreEvento);
+                int eventosEliminados = psEliminarEvento.executeUpdate();
+                if (eventosEliminados > 0) {
+                    System.out.println("El evento '" + nombreEvento + "' fue eliminado correctamente.");
+                    return true;
+                } else {
+                    System.out.println("No se encontró el evento con el nombre: " + nombreEvento);
+                    return false;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error al eliminar el evento: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private void limpiarVistaEventos() {
+        // Elimina todos los nodos hijos del VBox que contiene los botones de eventos
+        vboxEventos.getChildren().clear();
     }
 
 }
