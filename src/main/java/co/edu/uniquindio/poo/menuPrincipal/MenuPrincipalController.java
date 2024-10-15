@@ -96,7 +96,17 @@ public class MenuPrincipalController extends Utils {
 
                 // Crear un botón para cada evento
                 Button eventoBtn = new Button(nombreEvento);
-                eventoBtn.setStyle("-fx-background-color: #FF8C00; -fx-text-fill: white;");
+                eventoBtn.setStyle(
+                        "-fx-background-color: linear-gradient(yellow, #FF8C00);" + // Degradado de blanco a naranja oscuro
+                        "-fx-text-fill: black;" +    // Color de texto blanco
+                        "-fx-font-family: 'Forte';" + // Fuente "Forte"
+                        "-fx-background-radius: 20;" + // Bordes redondeados
+                        "-fx-padding: 10px 20px;" +  // Espaciado interno (alto y ancho)
+                        "-fx-font-size: 14px;" +     // Tamaño de fuente
+                        "-fx-border-radius: 20;"     // Bordes redondeados en el borde exterior
+                    );
+
+                
                 eventoBtn.setPrefWidth(200);
                 eventoBtn.setOnAction(e -> editarEvento(idEvento));
 

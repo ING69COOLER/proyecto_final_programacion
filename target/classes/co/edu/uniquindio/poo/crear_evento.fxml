@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.crear_evento.crearEventoController">
    <children>
       <Pane prefHeight="404.0" prefWidth="600.0" style="-fx-background-color: #F5F5DC;">
@@ -28,12 +27,12 @@
                   <Font name="Forte" size="15.0" />
                </font>
             </Label>
-            <Button fx:id="btn_crear" layoutX="278.0" layoutY="311.0" mnemonicParsing="false" onAction="#crear_evento" style="-fx-background-color: #4CAF50;" text="Crear">
+            <Button fx:id="btn_crear" layoutX="278.0" layoutY="311.0" mnemonicParsing="false" onAction="#crear_evento" stylesheets="@styles.css" text="Crear">
                <font>
                   <Font name="Forte" size="15.0" />
                </font>
             </Button>
-            <Button fx:id="btn_regresar" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#regresar" style="-fx-background-color: #7FDBFF;" text="Regresar">
+            <Button fx:id="btn_regresar" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#regresar" styleClass="buttonblue" stylesheets="@styles.css" text="Regresar">
                <font>
                   <Font name="Forte" size="15.0" />
                </font>

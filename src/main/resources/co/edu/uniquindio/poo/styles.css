@@ -1,0 +1,64 @@
+/* Estilo para un botón con degradado verde y fuente Forte */
+.button {
+    -fx-background-color: linear-gradient(#4CAF50, #2E7D32); /* Degradado de verde claro a verde oscuro */
+    -fx-font-family: "Forte"; /* Fuente estilo Forte */
+    -fx-font-size: 16px; /* Tamaño de letra */
+    -fx-text-fill: white; /* Color de la letra en blanco */
+    -fx-padding: 10px 20px; /* Espaciado interno del botón */
+    -fx-background-radius: 15; /* Bordes redondeados */
+    -fx-border-radius: 15;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.5) , 10,0.5,0,0 ); /* Sombra */
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(#66BB6A, #388E3C); /* Cambia el degradado cuando se pasa el mouse por encima */
+}
+
+.button:pressed {
+    -fx-background-color: linear-gradient(#388E3C, #1B5E20); /* Degradado más oscuro al presionar */
+}
+
+/* Estilo para un botón con degradado azul y fuente Forte */
+.buttonblue {
+    -fx-background-color: linear-gradient(#64B5F6, #1976D2); /* Degradado de azul claro a azul oscuro */
+    -fx-font-family: "Forte"; /* Fuente estilo Forte */
+    -fx-font-size: 16px; /* Tamaño de letra */
+    -fx-text-fill: white; /* Color de la letra en blanco */
+    -fx-padding: 10px 20px; /* Espaciado interno del botón */
+    -fx-background-radius: 15; /* Bordes redondeados */
+    -fx-border-radius: 15;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.5) , 10,0.5,0,0 ); /* Sombra */
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(#90CAF9, #1E88E5); /* Cambia el degradado cuando se pasa el mouse por encima */
+}
+
+.button:pressed {
+    -fx-background-color: linear-gradient(#1E88E5, #1565C0); /* Degradado más oscuro al presionar */
+}
+
+/* Estilo para un botón con degradado rojo y fuente Forte */
+.buttonRed {
+    -fx-background-color: linear-gradient(#E57373, #D32F2F); /* Degradado de rojo claro a rojo oscuro */
+    -fx-font-family: "Forte"; /* Fuente estilo Forte */
+    -fx-font-size: 16px; /* Tamaño de letra */
+    -fx-text-fill: white; /* Color de la letra en blanco */
+    -fx-padding: 10px 20px; /* Espaciado interno del botón */
+    -fx-background-radius: 15; /* Bordes redondeados */
+    -fx-border-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.5, 0, 0); /* Sombra */
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(#EF5350, #C62828); /* Cambia el degradado cuando se pasa el mouse por encima */
+}
+
+.button:pressed {
+    -fx-background-color: linear-gradient(#C62828, #B71C1C); /* Degradado más oscuro al presionar */
+}
+
+/* Fondo con degradado azul que combina con los botones */
+.root {
+    -fx-background-color: linear-gradient(to bottom, #E3F2FD, #BBDEFB, #64B5F6); /* Degradado suave de azul muy claro a azul medio */
+}

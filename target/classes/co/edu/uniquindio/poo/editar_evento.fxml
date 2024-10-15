@@ -63,7 +63,7 @@
             </font></Label>
 
             <!-- Botón para confirmar -->
-            <Button onAction="#guardarCliente" style="-fx-background-color: #4CAF50;" text="Aceptar">
+            <Button onAction="#guardarCliente" stylesheets="@styles.css" text="Aceptar">
             <font>
                <Font name="Forte" size="14.0" />
             </font></Button>
