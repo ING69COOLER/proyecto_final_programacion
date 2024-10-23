@@ -6,10 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class BuildBaseDeDatos {
+public class BuildBaseDeDatos implements IBuildBaseDeDatos {
+
+    private static BuildBaseDeDatos instancia;
 
     // Método para crear la tabla "persona" si no existe
-    public static void crearTablasUsuarios() {
+    public  void crearTablasUsuarios() {
         String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
         try {
             // Conectar a la base de datos
@@ -33,7 +35,7 @@ public class BuildBaseDeDatos {
         }
     }
 
-    public static void crearTablaEvento() {
+    public void crearTablaEvento() {
         String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
 
         try {
@@ -57,7 +59,7 @@ public class BuildBaseDeDatos {
         }
     }
 
-    public static void crearTablaPersonas() {
+    public  void crearTablaPersonas() {
         String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
 
         try {
@@ -83,7 +85,7 @@ public class BuildBaseDeDatos {
         }
     }
 
-    public static void crearSillasVip() {
+    public  void crearSillasVip() {
     String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
 
     try (Connection con = DriverManager.getConnection(url);
@@ -126,7 +128,7 @@ public class BuildBaseDeDatos {
     }
 }
 
-    public static void crearSillas() {
+    public  void crearSillas() {
         String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
 
         try (Connection con = DriverManager.getConnection(url);
@@ -170,12 +172,21 @@ public class BuildBaseDeDatos {
     }
 
 
-    public static void crearTablas(){
+    public void crearTablas(){
         crearSillas();
         crearSillasVip();
         crearTablaEvento();
         crearTablaPersonas();
         crearTablasUsuarios();
     }
+
+    public static BuildBaseDeDatos getInstancia() {
+        if (instancia == null) {
+            instancia = new BuildBaseDeDatos();
+        }
+        return instancia;  
+    }
+
+
 
 }

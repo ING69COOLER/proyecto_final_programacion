@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
 import co.edu.uniquindio.poo.App;
 import co.edu.uniquindio.poo.Utils;
 import co.edu.uniquindio.poo.editar_Evento.EditarEventoController;
@@ -37,7 +36,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
-public class MenuPrincipalController extends Utils {
+public class MenuPrincipalController implements Utils, IMenuPrincipal{
 
     @FXML
     private ResourceBundle resources;
@@ -123,7 +122,37 @@ public class MenuPrincipalController extends Utils {
 
     }
 
-    private void editarEvento(int idEvento) {
+    
+    @FXML
+    void eliminar_evento(ActionEvent event) {
+        Optional<Pair<String, String>> result = mostrarDialogoEliminarEvento();
+        result.ifPresent(datos -> {
+            String nombreEvento = datos.getKey();
+            String claveEmpresarial = datos.getValue();
+
+            // Validar clave empresarial
+            if (!validarClaveEmpresarial(claveEmpresarial)) {
+                System.out.println("Clave empresarial incorrecta.");
+                return;
+            }
+
+            // Eliminar el evento y personas relacionadas
+            if (eliminarPersonasYEvento(nombreEvento)) {
+                limpiarVistaEventos();
+                cargarEventos();
+            }
+        });
+    }
+    // Este método se llama al inicializar el controlador
+    @FXML
+    void initialize() {
+    
+        cargarEventos(); // Cargar los eventos al abrir la ventana
+        iniciarActualizacionAutomatica();
+    }
+
+
+    public void editarEvento(int idEvento) {
         try {
             // Cargar el archivo FXML
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/poo/editar_evento.fxml"));
@@ -143,7 +172,7 @@ public class MenuPrincipalController extends Utils {
         }
     }
 
-    private void actualizarResumenSillas() {
+    public void actualizarResumenSillas() {
         String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
 
         try (Connection con = DriverManager.getConnection(url);
@@ -199,38 +228,12 @@ public class MenuPrincipalController extends Utils {
         }
     }
 
-    // Este método se llama al inicializar el controlador
-    @FXML
-    void initialize() {
-        cargarEventos(); // Cargar los eventos al abrir la ventana
-        iniciarActualizacionAutomatica();
-    }
+    
 
-    private void iniciarActualizacionAutomatica() {
+    public void iniciarActualizacionAutomatica() {
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> actualizarResumenSillas()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
-    }
-
-    @FXML
-    void eliminar_evento(ActionEvent event) {
-        Optional<Pair<String, String>> result = mostrarDialogoEliminarEvento();
-        result.ifPresent(datos -> {
-            String nombreEvento = datos.getKey();
-            String claveEmpresarial = datos.getValue();
-
-            // Validar clave empresarial
-            if (!validarClaveEmpresarial(claveEmpresarial)) {
-                System.out.println("Clave empresarial incorrecta.");
-                return;
-            }
-
-            // Eliminar el evento y personas relacionadas
-            if (eliminarPersonasYEvento(nombreEvento)) {
-                limpiarVistaEventos();
-                cargarEventos();
-            }
-        });
     }
 
     // Mostrar diálogo para ingresar nombre del evento y clave empresarial
@@ -317,9 +320,9 @@ public class MenuPrincipalController extends Utils {
         }
     }
 
-    private void limpiarVistaEventos() {
+
+    public void limpiarVistaEventos() {
         // Elimina todos los nodos hijos del VBox que contiene los botones de eventos
         vboxEventos.getChildren().clear();
     }
-
 }

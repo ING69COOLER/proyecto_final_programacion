@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class EditarEventoController {
+public class EditarEventoController  implements IEditarEvento{
 
     @FXML
     private Label lblNombreEvento, lblCostoEvento, lblTotalPagar;
@@ -36,9 +36,62 @@ public class EditarEventoController {
 
     @FXML
     public void initialize() {
-        // Este método se llama automáticamente al cargar la ventana
+       
     }
 
+    @FXML
+    private void calcularTotalPagar() {
+        double totalPagar = costoRegular; // Iniciar con el costo regular del evento
+
+        // Verificar si se seleccionó una silla
+        if (toggleGroupSillas.getSelectedToggle() != null) {
+            RadioButton sillaSeleccionada = (RadioButton) toggleGroupSillas.getSelectedToggle();
+            // Verificar si es una silla VIP
+            boolean esVip = gridSillasVip.getChildren().stream()
+                    .anyMatch(node -> node instanceof RadioButton && node.equals(sillaSeleccionada));
+
+            if (esVip) {
+                totalPagar += (costoRegular * porcentajeExtra / 100); // Sumar el porcentaje adicional
+            }
+        }
+
+        lblTotalPagar.setText("Total a Pagar: $" + totalPagar); // Actualizar el total en la etiqueta
+    }
+
+    @FXML
+    private void guardarCliente() {
+        String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
+
+        try (Connection con = DriverManager.getConnection(url)) {
+            if (idPersonaAsignadaEvento(con)) {
+                System.out.println("Error: El id_persona ya está asignado a este evento. No se puede duplicar.");
+                return;
+            }
+
+            int idSilla;
+            String tipoSilla;
+            try {
+                idSilla = obtenerIdSillaSeleccionada();
+                tipoSilla = obtenerTipoSillaSeleccionada();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                return;
+            }
+
+            if (combinacionSillaYaAsignada(con, idSilla, tipoSilla)) {
+                System.out.println("Error: La combinación de evento, silla y tipo ya está asignada.");
+                return;
+            }
+
+            insertarCliente(con, idSilla, tipoSilla);
+            cerrarVentana();
+        } catch (Exception e) {
+            System.out.println("Error al guardar el cliente: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void cargarDatosEvento(int idEvento) {
         this.idEvento = idEvento;
         String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
@@ -67,9 +120,6 @@ public class EditarEventoController {
         }
     }
     
-
-
-
     private void cargarSillasDisponibles(String query, GridPane grid, String tipoSillaQuery) {
         String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
 
@@ -134,58 +184,6 @@ public class EditarEventoController {
 
         silla.setOnAction(e -> calcularTotalPagar());
         return silla;
-    }
-
-    @FXML
-    private void calcularTotalPagar() {
-        double totalPagar = costoRegular; // Iniciar con el costo regular del evento
-
-        // Verificar si se seleccionó una silla
-        if (toggleGroupSillas.getSelectedToggle() != null) {
-            RadioButton sillaSeleccionada = (RadioButton) toggleGroupSillas.getSelectedToggle();
-            // Verificar si es una silla VIP
-            boolean esVip = gridSillasVip.getChildren().stream()
-                    .anyMatch(node -> node instanceof RadioButton && node.equals(sillaSeleccionada));
-
-            if (esVip) {
-                totalPagar += (costoRegular * porcentajeExtra / 100); // Sumar el porcentaje adicional
-            }
-        }
-
-        lblTotalPagar.setText("Total a Pagar: $" + totalPagar); // Actualizar el total en la etiqueta
-    }
-
-    @FXML
-    private void guardarCliente() {
-        String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
-
-        try (Connection con = DriverManager.getConnection(url)) {
-            if (idPersonaAsignadaEvento(con)) {
-                System.out.println("Error: El id_persona ya está asignado a este evento. No se puede duplicar.");
-                return;
-            }
-
-            int idSilla;
-            String tipoSilla;
-            try {
-                idSilla = obtenerIdSillaSeleccionada();
-                tipoSilla = obtenerTipoSillaSeleccionada();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                return;
-            }
-
-            if (combinacionSillaYaAsignada(con, idSilla, tipoSilla)) {
-                System.out.println("Error: La combinación de evento, silla y tipo ya está asignada.");
-                return;
-            }
-
-            insertarCliente(con, idSilla, tipoSilla);
-            cerrarVentana();
-        } catch (Exception e) {
-            System.out.println("Error al guardar el cliente: " + e.getMessage());
-            e.printStackTrace();
-        }
     }
 
     private boolean idPersonaAsignadaEvento(Connection con) throws SQLException {

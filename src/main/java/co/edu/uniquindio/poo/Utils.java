@@ -5,16 +5,19 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public abstract class Utils {
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
+public  interface  Utils {
     static String clave_empresarial = "1234";
 
-    public static String getClave_empresarial() {
+    public default String getClave_empresarial() {
         return clave_empresarial;
 
         
     }
 
-    public  boolean usuarioExiste(String usuario) {
+    public default  boolean usuarioExiste(String usuario) {
         String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
         String query = "SELECT * FROM Usuarios WHERE user = ?";
 
@@ -35,7 +38,7 @@ public abstract class Utils {
         return false; // Si no hay resultados, el usuario no existe
     }
 
-    public  boolean verificarClave(String usuario, String clave) {
+    public default  boolean verificarClave(String usuario, String clave) {
         String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
         boolean coincide = false; // Variable para almacenar el resultado
 
@@ -68,5 +71,11 @@ public abstract class Utils {
         return coincide; // Retornar el resultado
     }
 
-    
+    public default void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
 }

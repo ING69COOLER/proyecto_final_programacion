@@ -12,7 +12,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-public class RegistroController extends Utils {
+public class RegistroController implements Utils {
 
     @FXML
     private ResourceBundle resources;
@@ -46,13 +46,14 @@ public class RegistroController extends Utils {
         String contraseña2 = txt_contraseña_2.getText();
 
         // Verificar si las contraseñas coinciden y si la clave empresarial es correcta
-        if (contraseña1.equals(contraseña2) && clave.equals(Utils.getClave_empresarial())) {
+        if (contraseña1.equals(contraseña2) && clave.equals(getClave_empresarial())) {
             // Verificar si el usuario ya existe en la base de datos
             if (usuarioExiste(usuario)) {
                 System.out.println("El usuario ya existe. Intenta con otro nombre de usuario.");
             } else {
                 // Agregar el usuario a la base de datos
-                DBUtils.agregarUsuarios(usuario, contraseña1);
+                DBUtils.getInstancia().agregarUsuarios(usuario, contraseña1);
+
                 System.out.println("Usuario registrado exitosamente.");
                 
                 // Redirigir a la ventana de inicio de sesión

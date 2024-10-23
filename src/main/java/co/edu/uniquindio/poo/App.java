@@ -19,7 +19,7 @@ public class App extends Application {
     @Override
     public void start(@SuppressWarnings("exports") Stage stage) throws IOException {
         scene = new Scene(loadFXML("inicio_Sesion"), 640, 480);
-        
+
         stage.setScene(scene);
         stage.show();
     }
@@ -34,7 +34,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        BuildBaseDeDatos.crearTablas();
+        BuildBaseDeDatos.getInstancia().crearTablas();
         launch();
     }
 

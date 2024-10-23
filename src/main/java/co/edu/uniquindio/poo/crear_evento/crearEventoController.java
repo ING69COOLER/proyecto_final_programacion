@@ -63,11 +63,8 @@ public class crearEventoController {
                 return;
             }
 
-            // Crear la tabla si no existe
-            BuildBaseDeDatos.crearTablaEvento();
-
             // Agregar el evento a la base de datos
-            DBUtils.agregarEvento(nombre, costo, tipoEvento, porcentajeExtra);
+            DBUtils.getInstancia().agregarEvento(nombre, costo, tipoEvento, porcentajeExtra);
 
             // Redirigir al menú principal
             App.setRoot("menu_principal");

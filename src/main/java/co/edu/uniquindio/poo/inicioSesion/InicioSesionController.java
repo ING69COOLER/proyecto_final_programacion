@@ -4,12 +4,10 @@ import java.io.IOException;
 import co.edu.uniquindio.poo.App;
 import co.edu.uniquindio.poo.Utils;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-public class InicioSesionController extends Utils {
+public class InicioSesionController implements Utils {
     @FXML
     private Button btn_Inicio_Sesion;
 
@@ -40,11 +38,5 @@ public class InicioSesionController extends Utils {
         }
     }
 
-    private void mostrarAlerta(String titulo, String mensaje) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
+    
 }

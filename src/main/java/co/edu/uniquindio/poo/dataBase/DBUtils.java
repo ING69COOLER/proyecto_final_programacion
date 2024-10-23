@@ -1,11 +1,29 @@
 package co.edu.uniquindio.poo.dataBase;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
 public class DBUtils {
 
-    public static void agregarEvento(String nombre, int costo, String tipo, double porcentajeExtra) {
+    // Única instancia de la clase (Singleton)
+    private static DBUtils instancia;
+
+    // Constructor privado para evitar la creación de nuevas instancias
+    private DBUtils() {
+        // Constructor vacío, si fuera necesario inicializar algo se haría aquí
+    }
+
+    // Método estático para obtener la única instancia de la clase
+    public static DBUtils getInstancia() {
+        if (instancia == null) {
+            instancia = new DBUtils();
+        }
+        return instancia;
+    }
+
+    // Métodos para las operaciones en la base de datos
+    public void agregarEvento(String nombre, int costo, String tipo, double porcentajeExtra) {
         String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
         String query = "INSERT INTO Evento (Nombre, Costo, Tipo, porcentaje_extra) VALUES (?, ?, ?, ?)";
 
@@ -27,7 +45,7 @@ public class DBUtils {
         }
     }
 
-    public static void agregarUsuarios(String user, String password) {
+    public void agregarUsuarios(String user, String password) {
         String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
         String query = "INSERT INTO Usuarios (user, password) VALUES (?, ?)";
     
@@ -46,9 +64,8 @@ public class DBUtils {
             System.out.println("Error al agregar usuario: " + e);
         }
     }
- 
 
-    public static void agregarPersona(int idEvento, int idSilla, String tipoSilla, String nombrePersona, int idPersona, int totalPagar) {
+    public void agregarPersona(int idEvento, int idSilla, String tipoSilla, String nombrePersona, int idPersona, int totalPagar) {
         String url = "jdbc:sqlite:src\\main\\java\\co\\edu\\uniquindio\\poo\\dataBase\\DB\\DB.db";
         String query = "INSERT INTO persona (id_evento, id_silla, tipo_silla, nombre_persona, id_persona, total_pagar) VALUES (?, ?, ?, ?, ?, ?)";
     
@@ -71,7 +88,4 @@ public class DBUtils {
             System.out.println("Error al agregar persona: " + e);
         }
     }
-    
-    
-    
 }
